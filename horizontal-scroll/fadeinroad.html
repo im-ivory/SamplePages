@@ -9,12 +9,8 @@
     <title>Document</title>
     <style>
 html,body{
-    padding:0;margin:0;
+    padding:0;margin:0; width: 100%; height: 100%;
 }
-*{
-	box-sizing: border-box;
-}
-
 body { 
   background-color: #FEFEFE;
   overflow-x: hidden;
@@ -25,89 +21,78 @@ body {
   align-items: center;
   justify-content: center;
 }
-.portfolio {
+.container {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-wrap: nowrap;
 	background-color: #1F242D;
   overflow: hidden;
-  background-image:url("../content/road.png");
+  background-image: url("../content/road.png");
   background-repeat: repeat-x;
-  background-position-y: 600px;
+  background-position: 50% 60%;
 }
 .panel {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   align-content: center;
   justify-content: center;
-    height: 100%;
-    width: 100%;
-  background-color: transparent;
-  padding: 0 200px;
-  overflow: hidden;
-}
-.panel_item_content {
 	height: 100%;
-	width: 100%;
+    padding: 0 200px;
+}
+.panel_item {
+	height: 100%;
+	width: 700px;
   margin: 0 auto;
  color: white;
  display: flex;
  flex-direction: column;
   align-items: center;
-  justify-content: center;
-
+  padding-top: 100px;
 }
-.panel_item_content .text > h1{
-    color: white;
-    font-size: 3rem;
-}
-.panel_item_content > .text{
-    opacity:0;
-}
-.panel_item_content > .text.show{
+.panel_item .text.show{
     opacity:1;
     transition: 0.3s opacity;
 }
-.home, .school{
-    transform: translateY(-200px)
+.panel_item .text{
+    padding-bottom: 20px;
+    opacity:0;
 }
-.bus > .img{
-    position: relative;
+.panel .panel_item .img img{
+    width: 100%;
 }
-.bus > .img > img:first-child{
-    transform: translate(200px, 80px);
+.bus .panel_item,
+.taxi .panel_item{
+    justify-content: center;
 }
-.bus > .img > img:last-child,
-.bus > .img > img:nth-child(2){
-    transform: translateY(130px);
-    width: 800px;
-}
-.bus > .img > img:last-child{
-    width: 300px;
-    position:absolute;
-    left: 160px;
-    bottom: 10px;
-}
-.taxi{
-    transform: translateY(200px);
-}
-.taxi > .img > img:last-child{
-    transform: translateY(40px);
-}
-.taxi .text{
-    transform: translateY(50px)
-}
-.taxi .text h1:after{
-    content:url("../content/arrow.png");
-    padding-left: 20px;
-}
-.office{
-    transform: translateY(-170px);
-}
-.office .img img{
+.bus .img{
     width: 400px;
 }
+.bus .img .subway{
+    width: 800px;
+    position: relative;
+}
+.bus .img .subway img:last-child{
+    width: 300px;
+    position:absolute;
+    left: 150px;
+    bottom: 10px;
+}
+.taxi .panel_item{
+    padding-top: 0px;
+    padding-bottom: 50px;
+}
+.taxi .img{
+    width: 200px;
+}
+.taxi .img img:last-child{
+    transform: translateX(-100px);
+}
+.office .img{
+    width: 400px;
+}
+
     </style>
 </head>
 <body>
@@ -115,108 +100,85 @@ body {
         <div class="spacer">
             <h1>Scroll Down</h1>
         </div> 
-        <section class="portfolio">
-                        <div class="panel">
-                    <div class="panel_item_content home">
-                        <div class="text">
-                            <h1>Home</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                        </div>
-                        <div class="img">
-                            <img src="../content/house.png" alt="">
-                        </div>
+        <section class="container">
+            <div class="panel home">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Home</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
                     </div>
+                    <div class="img">
+                        <img src="../content/house.png" alt="">
+                    </div>
+                </div>
             </div>   
-            <div class="panel">             
-                    <div class="panel_item_content bus">
-                        <div class="text">
-                            <h1>Bus</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                        </div>
-                        <div class="img">
-                            <img src="../content/bus.png" alt="">
+            <div class="panel bus">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Bus</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="img">
+                        <img src="../content/bus.png" alt="">
+                        <div class="subway">
                             <img src="../content/subway-station.png" alt="">
                             <img src="../content/subway-train.png" alt="">
                         </div>
                     </div>
+                </div>
             </div>  
-            <div class="panel">                
-                    <div class="panel_item_content school">
-                        <div class="text">
-                            <h1>School</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                        </div>
-                        <div class="img">
-                            <img src="../content/school.png" alt="">
-                        </div>
+            <div class="panel school">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>School</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
                     </div>
-            </div> 
-            <div class="panel">               
-                    <div class="panel_item_content taxi">
-                        <div class="img">
-                            <img src="../content/cab.png" alt="">
-                            <img src="../content/car.png" alt="">
-                        </div>
-                        <div class="text">
-                            <h1>Taxi</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                        </div>
-                    </div>
-            </div>
-            <div class="panel">         
-                    <div class="panel_item_content office">
-                        <div class="text">
-                            <h1>Office</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                        </div>
-                        <div class="img">
-                            <img src="../content/office.png" alt="">
-                        </div>
-                    </div>
-            </div>
-            <!--  <div class="panel"> -->
-                
-                    <!-- <div class="panel_item_content">
-
-                        <h1>Dedicated Web Development</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                    <div class="img">
+                        <img src="../content/school.png" alt="">
                     </div>
                 </div>
-            </div>     -->
-            <!-- <div class="panel">
-                
-                    <div class="panel_item_content">
-
-                        <h1>Dedicated Web Development</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+            </div> 
+            <div class="panel taxi">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Taxi</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="img">
+                        <img src="../content/cab.png" alt="">
+                        <img src="../content/car.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="panel office">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Office</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="img">
+                        <img src="../content/office.png" alt="">
                     </div>
                 </div>
             </div>
             <div class="panel">
-                
-                    <div class="panel_item_content">
-
-                        <h1>Dedicated Web Development</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
-                    </div>
+                <div class="panel_item">
                 </div>
-            </div> -->
+            </div>
         </section>
         <div class="spacer">
             <h1>The End</h1>
-            <a href="fadeinroad mobile.html">MOBILE VER</a>
         </div>
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-let container = document.querySelector(".portfolio");
+let container = document.querySelector(".container");
 let tl = gsap.timeline({
   scrollTrigger: {
     pin: true,
     scrub: 1,
     trigger: container,
-    end: () => container.scrollWidth 
-    //- document.documentElement.clientWidth // container 전체 가로크기 - 현재보여지는 창 가로크기 = 
+    end: () => container.scrollWidth - document.documentElement.clientWidth// container 전체 가로크기 - 현재보여지는 창 가로크기 = 
   },
   defaults: { ease: "none", duration: 1 }
 });
@@ -226,14 +188,14 @@ tl.to(".panel", {
 }, 0)
 
 
-let panels = Array.from(document.querySelectorAll(".text"));
+let texts = Array.from(document.querySelectorAll(".text"));
 
 function showText(){
-   panels.forEach(function(panel){
-    if(panel.getBoundingClientRect().left < 900){
-    panel.classList.add("show");
-   } else{
-    panel.classList.remove("show");
+   texts.forEach(function(text){
+    if(text.getBoundingClientRect().left < 800){
+    text.classList.add("show");
+   }  else{
+       text.classList.remove("show");
    }
 })
 }
@@ -243,3 +205,7 @@ window.addEventListener("scroll", showText);
 </script>
 </body>
 </html>
+
+
+
+
