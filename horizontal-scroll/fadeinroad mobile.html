@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/ScrollTrigger.min.js"></script>
+    <title>Document</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap');
+html,body{
+    padding:0;margin:0;
+}
+*, *:before, *:after {
+	box-sizing: border-box;
+	position: relative;
+	letter-spacing: 0.04em;
+}
+
+::selection{
+    color: black;
+    background-color: yellow;
+}
+body { 
+  font-family: 'Montserrat', sans-serif;
+  background-color: #FEFEFE;
+  overflow-x: hidden;
+}
+.spacer {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+h1 {
+  font-size: 2rem;
+  color: #000;
+}
+.section {
+  height: auto;
+  width: 100%;
+  position: relative;
+  padding: 0;
+  overflow-x: hidden;
+}
+.portfolio {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-wrap: nowrap;
+	background-color: #1F242D;
+  overflow: hidden;
+  background-image:url("../content/road.png");
+  background-repeat: repeat-x;
+  background-position-y: 450px;
+}
+.portfolio_title {
+	position: absolute;
+	top: 0;
+	left: -15rem;
+	font-size: 24rem;
+	letter-spacing: 0;
+	-webkit-text-stroke-color: #343A42;
+	display: inline-block;
+}
+.panel {
+  display: flex;
+  flex: 0 0 60%;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+height: 100%;
+padding: 0 200px;
+margin: 0 200px;
+  background-color: transparent;
+  /* overflow: hidden; */
+}
+.panel_item {
+	height: 100%;
+	width: 100%;
+  margin: 0 auto;
+ color: white;
+ display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+.panel_item .text > h1{
+    color: white;
+}
+.panel_item .text p{
+    font-size: 1rem;
+    width: 80%;
+}
+.panel_item_content > .text{
+    opacity:0;
+}
+.home img{
+    width: 400px;
+}
+.panel_item_content > .text.show{
+    opacity:1;
+    transition: 0.3s opacity;
+}
+.home, .school{
+    transform: translateY(-200px)
+}
+.bus > .img{
+    position: relative;
+}
+.bus > .img > img:first-child{
+    transform: translate(10px, 50px);
+    width: 350px;
+}
+.bus > .img > img:last-child,
+.bus > .img > img:nth-child(2){
+    transform: translateY(80px);
+    width: 620px;
+}
+.bus > .img > img:last-child{
+    width: 200px;
+    position:absolute;
+    left: 160px;
+    bottom: 10px;
+}
+.bus .text p{
+    width: 50%;
+}
+.taxi{
+    transform: translateY(200px);
+}
+.taxi .img{
+    transform: translateY(70px);
+}
+.taxi .img img{
+    width: 150px;
+}
+.taxi .img img:first-child{
+    transform: translate(100px,-20px);
+}
+/* .taxi > .img > img:last-child{
+    transform: translateY(40px);
+} */
+.taxi .text{
+    transform: translateY(50px);
+}
+.taxi .text p{
+    width: 100%;
+}
+.taxi .text h1:after{
+    content:url("../content/arrow.png");
+    padding-left: 20px;
+}
+.school img{
+    width: 300px;
+}
+.office{
+    transform: translateY(-170px);
+}
+.office .img img{
+    width: 300px;
+}
+    </style>
+</head>
+<body>
+    <body>
+        <div class="spacer">
+            <h1>Scroll Down</h1>
+        </div> 
+        <section class="section portfolio">
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content home">
+                        <div class="text">
+                            <h1>Home</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                        </div>
+                        <div class="img">
+                            <img src="../content/house.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>   
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content bus">
+                        <div class="text">
+                            <h1>Bus</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                        </div>
+                        <div class="img">
+                            <img src="../content/bus.png" alt="">
+                            <img src="../content/subway-station.png" alt="">
+                            <img src="../content/subway-train.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content school">
+                        <div class="text">
+                            <h1>School</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                        </div>
+                        <div class="img">
+                            <img src="../content/school.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content taxi">
+                        <div class="img">
+                            <img src="../content/cab.png" alt="">
+                            <img src="../content/car.png" alt="">
+                        </div>
+                        <div class="text">
+                            <h1>Taxi</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content office">
+                        <div class="text">
+                            <h1>Office</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                        </div>
+                        <div class="img">
+                            <img src="../content/office.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <!-- <div class="panel"> -->
+                <div class="panel_item">
+                    <div class="panel_item_content">
+
+                        <h1>Dedicated Web Development</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                    </div>
+                </div>
+            </div>    -->
+            <!-- <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content">
+
+                        <h1>Dedicated Web Development</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="panel_item_content">
+
+                        <h1>Dedicated Web Development</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna ali</p>
+                    </div>
+                </div>
+            </div> -->
+        </section>
+        <div class="spacer">
+            <h1>The End</h1>
+        </div>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+let container = document.querySelector(".portfolio");
+let tl = gsap.timeline({
+  scrollTrigger: {
+    pin: true,
+    scrub: 1,
+    trigger: container,
+    end: () => container.scrollWidth 
+    //- document.documentElement.clientWidth // container 전체 가로크기 - 현재보여지는 창 가로크기 = 
+  },
+  defaults: { ease: "none", duration: 1 }
+});
+
+tl.to(".panel", { 
+    x: () => -(container.scrollWidth - document.documentElement.clientWidth) 
+}, 0)
+
+
+let panels = Array.from(document.querySelectorAll(".text"));
+
+function showText(){
+   panels.forEach(function(panel){
+    if(panel.getBoundingClientRect().left < 300){
+    panel.classList.add("show");
+   } else{
+    panel.classList.remove("show");
+   }
+})
+}
+
+window.addEventListener("scroll", showText);
+
+</script>
+</body>
+</html>

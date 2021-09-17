@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      html {
+  height: 100vh;
+}
+
+body {
+  height: 500vh;
+  background: #000;
+}
+
+canvas {
+  position: fixed;
+  /* left: 50%; */
+  top: 0;
+  /* transform: translate(-50%, -50%); */
+  max-width: 100vw;
+  max-height: 100vh;
+}
+div{
+    height: 100vh;
+}
+    </style>
+</head>
+<body>
+    <canvas id="hero-lightpass" />
+    </canvas>
+    <div>
+        HELLO
+    </div>
+    <script>
+const html = document.documentElement;
+const canvas = document.getElementById("hero-lightpass");
+const context = canvas.getContext("2d");
+
+const frameCount = 197; // 전체 사진 갯수? Maybe
+const currentFrame = index => ( // function currentFrame(index)
+  `../content/dongatest/dongatest (${ index.toString().padStart(1, '0')}).jpg`
+) // currentFrame은 함수인데, 인자로 숫자 앞에 0을 붙여서 4자리수로 만든다. 예) currentFrame(1) -> /0001.jpg
+
+// const preloadImages = () => {
+//   for (let i = 1; i < frameCount; i++) {
+//     const img = new Image(); 
+//     img.src = currentFrame(i); // img 0001, 0002, 0003 이미지를 미리 다 로드해놓는것
+//   }
+// };
+
+const img = new Image(); //이미지 객체 생성
+img.src = currentFrame(1); //이미지의 주소는 위의 currentFrame 함수 인자로 1, 즉 0001.jpg 맨 처음 사진
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+img.onload=function(){ //onload: 페이지가 읽혀지면 바로 실행하는 이벤트
+  context.drawImage(img, 0, 0); //이미지가 로드되면, 캔버스 왼쪽위부터 채워서 이미지를 그린다.
+}
+
+const updateImage = index => { // 💛 function updateImage(index) 이미지를 바꾸는 함수
+  img.src = currentFrame(index); // 이미지 주소는 입력받은 인자(index)
+  context.drawImage(img, 0, 0); // 입력받은 주소의 이미지를 출력한다.
+}
+
+window.addEventListener('scroll', () => {  // 스크롤할 때마다 호출되는 함수
+  const scrollTop = html.scrollTop; // scrollTop = 현재 스크롤 위치가 위에서부터 얼마나 떨어져있는지
+  const maxScrollTop = html.scrollHeight - window.innerHeight; // maxScrollTop = 전체 스크롤값 - 현재 윈도우창 세로길이 = 스크롤될 수 있는 최대값 = scrollTop의 최대값 = 3022
+  const scrollFraction = scrollTop / maxScrollTop; // 현재 스크롤이 전체에서 몇%나 스크롤됐는지. 예) scrollTop 200이면 0.06
+  const frameIndex = Math.min( //Math.min 두 개 중 더 작은 값을 반환
+    frameCount - 1, // 148-1 = 147
+    Math.ceil(scrollFraction * frameCount) // Math.ceil 소수점 이하를 올림한다. 8.88 -> 9 // 스크롤이 다 되면 148이 될테니 그때는 147이 됨
+  );  // 곱하는 이유는 나눠진 스크롤에 따라 이미지를 배분하기 위해..(?)
+
+//   console.log(scrollTop,scrollFraction, frameIndex);
+  
+  requestAnimationFrame(() => updateImage(frameIndex + 1)) // 💛 +1 하는 이유는 로드될때 이미 frameIndex 1인 상태이기 때문에 2부터 불러오려고?
+});
+
+// preloadImages();
+    </script>
+</body>
+</html>

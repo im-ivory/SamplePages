@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+           html,body{
+            padding:0;margin:0;
+        }
+        body{
+            position: relative;
+        }
+        #set-height {
+  display: block;
+  height: 6000px;
+  position: relative;
+}
+#v0 {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+p font-family helvetica {
+  font-size: 24px;
+}
+.previous, .after{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+section{  
+    display: block;
+    width: 500px;
+    height: 1000px;
+   margin-left: 100px;
+}
+section > h1{
+    background-color: rgb(240, 248, 255);
+    padding: 100px;
+}
+.text-container{
+    position: sticky;
+    top: 0;
+}
+    </style>
+</head>
+<body>
+<div class="previous">
+    <div class="img">
+        <img src="../content/house.png" alt="">
+    </div>
+    <div class="text">
+        <h1>HELLO THIS IS PREVIOUS TEXT. <br> NICE TO MEET YOU.</h1>
+    </div>
+</div>
+<div id="set-height">
+<video id="v0" tabindex="0" autobuffer="autobuffer" preload="preload">
+  <!-- <source src="https://www.html5rocks.com/en/tutorials/video/basics/devstories.webm" type="video/webm; codecs=&quot;vp8, vorbis&quot;"></source>
+  <source type="video/webm; codecs=&quot;vp8, vorbis&quot;" src="https://www.html5rocks.com/tutorials/video/basics/Chrome_ImF.webm"></source>
+  <source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="https://www.html5rocks.com/tutorials/video/basics/Chrome_ImF.ogv"></source> -->
+  <source type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" src="../content/Test_Donga.mp4"></source>
+  <p>Sorry, your browser does not support the &lt;video&gt; element.</p>
+</video>
+<div class="text-container">
+    <section class="01"><h1>text</h1></section>
+    <section class="02"><h1>text</h1></section>
+    <section class="03"><h1>text</h1></section>
+    <section class="04"><h1>text</h1></section>
+    <section class="05"><h1>text</h1></section>
+</div>
+</div>
+<div class="after">
+    <div class="img">
+        <img src="../content/house.png" alt="">
+    </div>
+    <div class="text">
+        <h1>HELLO THIS IS PREVIOUS TEXT. <br><a href="scrollingcontrols2 mobile.html">MOBILE VER</a>.</h1>
+    </div>
+</div>
+<!-- <section class="page01">
+    <h1>THIS IS TEXT.</h1>
+</section>
+<section class="page02">
+    <h1>THIS IS SECOND TEXT.</h1>
+</section> -->
+<script>
+// select video element
+var setHeight = document.querySelector('#set-height');
+var vid = document.getElementById('v0');
+//var vid = $('#v0')[0]; // jquery option
+
+// pause video on load
+vid.pause();
+ 
+// pause video on document scroll (stops autoplay once scroll started)
+
+var previous = document.querySelector(".previous");
+
+    window.onscroll = function(){
+    vid.pause();
+};
+
+
+
+// refresh video frames on interval for smoother playback
+setInterval(function(){
+    vid.currentTime = (window.pageYOffset-1000)/400;
+}, 40);
+
+
+</script>
+</body>
+</html>
