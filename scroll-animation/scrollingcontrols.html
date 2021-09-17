@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body{
+            padding:0;margin:0;
+        }
+        #set-height{
+            display: block;
+            position: relative;
+        }
+        #v0{
+            position: sticky;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+        .previous{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+section{  
+    display: block;
+    width: 500px;
+    height: 2200px;
+   margin-left: 100px;
+}
+section > h1{
+    background-color: rgb(240, 248, 255);
+    padding: 100px;
+}
+.text-container{
+    position: sticky;
+    top: 0;
+}
+    </style>
+</head>
+<body>
+    <div class="previous">
+        <div class="img">
+            <img src="../content/house.png" alt="">
+        </div>
+        <div class="text">
+            <h1>HELLO THIS IS PREVIOUS TEXT. <br> NICE TO MEET YOU.</h1>
+        </div>
+    </div>
+    <div id="set-height">
+        <video id="v0", tabindex="0">
+            <source type="video/mp4" src="../content/Test_Donga.mp4"></source>
+        </video>
+        <div class="text-container">
+            <section class="01"><h1>text</h1></section>
+            <section class="02"><h1>text</h1></section>
+            <section class="03"><h1>text</h1></section>
+            <section class="04"><h1>text</h1></section>
+            <section class="05"><h1>text</h1></section>
+        </div>
+    </div>
+    <div class="previous">
+        <div class="img">
+            <img src="../content/house.png" alt="">
+        </div>
+        <div class="text">
+            <h1>HELLO THIS IS PREVIOUS TEXT. <br> NICE TO MEET YOU.</h1>
+        </div>
+    </div>
+    <script>
+        var frameNumber = 0, // start video at frame 0
+    // lower numbers = faster playback
+    playbackConst = 800, 
+    // get page height from video duration
+    setHeight = document.getElementById("set-height"), 
+    // select video element         
+    vid = document.getElementById('v0'),
+    // var vid = $('#v0')[0]; // jquery option
+    previous = document.querySelector(".previous");
+
+// dynamically set the page height according to video length
+vid.addEventListener('loadedmetadata', function() {
+  setHeight.style.height = Math.ceil(vid.duration) * playbackConst + "px";
+}); // 비디오 컨테이너 높이-> Math.ceil(vid.duration) = 14. 14 * 800 px = 11200px
+
+
+
+// Use requestAnimationFrame for smooth playback
+function scrollPlay(){  
+  var frameNumber  = (window.pageYOffset-1000)/playbackConst; //프레임숫자 = 현재스크롤위치 / 800 -> 스크롤 위치 - 앞에 콘텐츠 높이를 빼야지 비디오가 창에 들어왔을때 실행됨 
+  vid.currentTime  = frameNumber;
+  window.requestAnimationFrame(scrollPlay);
+}
+
+    window.requestAnimationFrame(scrollPlay);
+
+
+    </script>
+</body>
+</html>
