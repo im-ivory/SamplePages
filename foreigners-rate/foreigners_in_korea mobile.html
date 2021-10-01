@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <title>Document</title>
+    <style>
+        html,body{width:100%;height:100%;margin:0;padding:0;}
+        .wrap{
+            position: relative;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        section{
+            width:100%;
+            height: 100vh;
+            
+        }
+        section .title{
+            font-size: 3vw;
+        }
+        section .text h1{
+            font-size: 2vw;
+        }
+        section .text p{
+            font-size: 3vw;
+        }
+        .section1 .inner{
+          width:100%;
+          height:100%;
+          position: fixed;
+          top: 0;
+          display:flex;
+          flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: url('한국지도.png');
+            background-size: 200px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .text{
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.692);
+            border: 1px solid black;
+        }
+        .year{
+          font-size: 50px;
+          font-weight: bold;
+          padding-bottom: 20px;
+        }
+        .foreigner{
+          padding-bottom: 20px;
+          font-size: 30px;
+        }
+        .foreigner:after,
+        .total:after{
+          content:"명"
+        }
+        .foreigner:before{
+          content:"외국인주민수";
+          font-size: 20px;
+          display: block;
+          padding-bottom: 10px;
+        }
+        .total{
+          font-size: 30px;
+        }
+        .total:before{
+          content:"총인구수";
+          font-size: 20px;
+          display:block;
+          padding-bottom: 10px;
+        }
+        #pct{
+          font-size: 50px;
+          font-weight: bold;
+          transition: all 0.4s;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        #pct p{
+          margin: 0;
+        }
+        #pct p:first-child{
+          font-size: 20px;
+        }
+        #pct .value{
+          display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="section1">
+          <div class="inner">
+            <div id="pct">
+              <p>총인구대비 외국인주민수 비율</p>
+              <p class="value">3.4%</p>
+            </div>
+              <div id="my_dataviz"></div>
+             <div class="text">
+                <div class="year">2015</div>
+                <div class="foreigner">1,741,919</div>
+                <div class="total">51,327,916</div>
+             </div>
+          </div>
+        </section>
+        <section class="section2"></section>
+        <section class="section3"></section>
+        <section class="section4"></section>
+        <section class="section5"></section>
+    </div>
+    <script>
+      var pct = document.querySelector(".value")
+  function firstSum(){
+    var foreignerTxt= 1764664;
+  var yearTxt= 2016;
+  var totalTxt= 51269554;
+
+  $({ val : 1741919 }).animate({ val : foreignerTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  }
+});
+
+$({ val : 2015 }).animate({ val : yearTxt }, {
+   duration: 100,
+  step: function() {
+    var num2 = Math.floor(this.val);
+    $(".year").text(num2);
+  },
+  complete: function() {
+    var num2 = Math.floor(this.val);
+    $(".year").text(num2);
+  }
+});
+
+$({ val : 51327916 }).animate({ val : totalTxt }, {
+   duration: 1000,
+  step: function() {
+    var num3 = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num3);
+  },
+  complete: function() {
+    var num3 = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num3);
+  }
+})
+
+  } 
+
+  function secondSum(){
+    var foreignerTxt= 1861084;
+  var yearTxt= 2017;
+  var totalTxt= 51322507;
+  
+  $({ val : 1764664 }).animate({ val : foreignerTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  }
+});
+
+$({ val : 2016 }).animate({ val : yearTxt }, {
+   duration: 100,
+  step: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  },
+  complete: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  }
+});
+
+$({ val : 51269554 }).animate({ val : totalTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  }
+});
+pct.innerText = "3.6%";
+  }
+
+  function thirdSum(){
+    var foreignerTxt= 2054621;
+  var yearTxt= 2018;
+  var totalTxt= 51629512;
+  
+  $({ val : 1861084 }).animate({ val : foreignerTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  }
+});
+
+$({ val : 2017 }).animate({ val : yearTxt }, {
+   duration: 100,
+  step: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  },
+  complete: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  }
+});
+
+$({ val : 51322507 }).animate({ val : totalTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  }
+});
+
+pct.innerText = "4.0%";
+  }
+
+  function fourthSum(){
+    var foreignerTxt= 2216612;
+  var yearTxt= 2019;
+  var totalTxt= 51779203;
+  
+  $({ val : 2054621 }).animate({ val : foreignerTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".foreigner").text(num);
+  }
+});
+
+$({ val : 2018 }).animate({ val : yearTxt }, {
+   duration: 100,
+  step: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  },
+  complete: function() {
+    var num = Math.floor(this.val);
+    $(".year").text(num);
+  }
+});
+
+$({ val : 51629512 }).animate({ val : totalTxt }, {
+   duration: 1000,
+  step: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  },
+  complete: function() {
+    var num = numberWithCommas(Math.floor(this.val));
+    $(".total").text(num);
+  }
+});
+
+pct.innerText = "4.3%";
+  }
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+ // set the dimensions and margins of the graph
+          var width = 250
+            height = 250
+            margin = 40
+        
+        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+        var radius = Math.min(width, height) / 2 - margin
+        
+        // append the svg object to the div called 'my_dataviz'
+        var svg = d3.select("#my_dataviz")
+          .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+          .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        
+        // Create dummy data
+        var data = {a: 1741919, b: 51327916}
+        var data2 = {a: 1764664, b: 51269554}
+        var data3 = {a: 1861084, b:51322507}
+        var data4 = {a: 2054621, b:51629512}
+        var data5 = {a: 2216612, b:51779203}
+        
+        // set the color scale
+        var color = d3.scaleOrdinal()
+          .domain(data)
+          .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"])
+        
+
+            function update(data){
+                var pie = d3.pie()
+                    .value(function(d) {return d.value; })
+                    var data_ready = pie(d3.entries(data))
+
+                var u = svg.selectAll("path")
+                .data(data_ready)
+
+                u
+                .enter()
+                .append('path')
+                .merge(u)
+                .transition()
+                .duration(1000)
+                .attr('d', d3.arc()
+                .innerRadius(0)
+                .outerRadius(radius)
+                )
+                .attr('fill', function(d){ return(color(d.data.key)) })
+                .attr("stroke", "black")
+                .style("stroke-width", "2px")
+                .style("opacity", 0.8)
+
+            // remove the group that is not present anymore
+            u
+                .exit()
+                .remove()
+            }
+        
+            update(data);
+
+
+            const winH = window.innerHeight;
+            var scrollY = window.scrollY;
+            const section2 = document.querySelector(".section2");
+            const section3 = document.querySelector(".section3");
+            const section4 = document.querySelector(".section4");
+            const section5 = document.querySelector(".section5");
+            // showText1();
+
+            function showText1(){
+                    if(winH / 2> section2.getBoundingClientRect().top){
+                        firstSum();
+                        update(data2);
+                        window.removeEventListener("scroll", showText1);
+                    }
+            }
+            function showText2(){
+                    if(winH / 2> section3.getBoundingClientRect().top){
+                      secondSum();
+                      update(data3);
+                        window.removeEventListener("scroll", showText2);
+                    }
+            }
+            function showText3(){
+                    if(winH / 2> section4.getBoundingClientRect().top){
+                      thirdSum();
+                      update(data4);
+                        window.removeEventListener("scroll", showText3);
+                    }
+            }
+            function showText4(){
+                    if(winH / 2> section5.getBoundingClientRect().top){
+                      fourthSum();
+                      update(data5);
+                        window.removeEventListener("scroll", showText4);
+                    }
+            }
+
+            window.addEventListener("scroll", showText1);
+            window.addEventListener("scroll", showText2);
+            window.addEventListener("scroll", showText3);
+            window.addEventListener("scroll", showText4);
+    </script>
+</body>
+</html>
