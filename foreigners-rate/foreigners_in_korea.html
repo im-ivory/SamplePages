@@ -19,10 +19,7 @@
         section{
             width:100%;
             height: 100vh;
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            
         }
         section .title{
             font-size: 4vw;
@@ -33,9 +30,15 @@
         section .text p{
             font-size: 3vw;
         }
-        .section1{
+        .section1 .inner{
+          width:100%;
+          height:100%;
           position: fixed;
           top: 0;
+          display:flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
         .text{
             width: 300px;
@@ -146,22 +149,24 @@
 <body>
     <div class="wrap">
         <section class="section1">
-          <div id="pct">
-            <p>총인구대비 외국인주민수 비율</p>
-            <p class="value">3.4%</p>
+          <div class="inner">
+            <div id="pct">
+              <p>총인구대비 외국인주민수 비율</p>
+              <p class="value">3.4%</p>
+            </div>
+            <div class="img">
+              <img src="한국지도.png" alt="">
+              <div id="my_dataviz"></div>
+            </div>
+             <div class="text">
+                <div class="year">2015</div>
+                <div class="foreigner">1,741,919</div>
+                <div class="total">51,327,916</div>
+             </div>
           </div>
-          <div class="img">
-            <img src="한국지도.png" alt="">
-            <div id="my_dataviz"></div>
-          </div>
-           <div class="text">
-              <div class="year">2015</div>
-              <div class="foreigner">1,741,919</div>
-              <div class="total">51,327,916</div>
-           </div>
         </section>
         <section class="section2"></section>
-        <section class="section3" ></section>
+        <section class="section3"></section>
         <section class="section4"></section>
         <section class="section5"></section>
     </div>
@@ -411,7 +416,7 @@ function numberWithCommas(x) {
             const section3 = document.querySelector(".section3");
             const section4 = document.querySelector(".section4");
             const section5 = document.querySelector(".section5");
-            showText1();
+            // showText1();
 
             function showText1(){
                     if(winH / 2> section2.getBoundingClientRect().top){
