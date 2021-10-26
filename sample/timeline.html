@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/ScrollTrigger.min.js"></script>
+    <title>Document</title>
+    <style>
+html,body{
+    padding:0;margin:0; width: 100%; height: 100%;
+}
+body { 
+  background-color: #FEFEFE;
+  overflow-x: hidden;
+}
+.spacer {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-wrap: nowrap;
+	background-color: #1F242D;
+  overflow: hidden;
+}
+.panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+	height: 100%;
+    padding: 0 200px;
+}
+.panel_item {
+	height: 100%;
+	width: 700px;
+  margin: 0 auto;
+ color: white;
+ display: flex;
+ flex-direction: column;
+  align-items: center;
+  margin-top: 42%;
+}
+.panel:nth-child(2n) > .panel_item{
+    justify-content: inherit;
+    flex-direction: column-reverse;
+    margin-top: 30%;
+}
+.panel_item .text.show{
+    opacity:1;
+    transition: 0.3s opacity;
+}
+
+/* .panel_item:after{
+    content:"";
+    width: 50px;
+    height: 100px;
+    border-left: 3px solid white;
+    display: block;
+    position: absolute;
+} */
+.panel_item .text{
+    padding-bottom: 50px;
+    opacity:0;
+}
+.date{
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.date h1{
+    margin: 0;
+    margin-bottom: 25px;
+}
+.date:after{
+    content:"";
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    display: block;
+}
+
+.line{
+    width: 100%;
+    position: absolute;
+    top: 51%;
+    border-bottom: 5px solid white;
+}
+
+.panel_item #sample{
+    font-size: 5vw;
+    background: white;
+    color: black;
+    transform: rotate(-15deg);
+    padding: 0 15px;
+    margin-top: 36%;
+}
+
+    </style>
+</head>
+<body>
+    <body>
+        <div class="spacer">
+            <h1>Scroll Down</h1>
+        </div> 
+        <section class="container">
+            <div class="line"></div>
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Home</h1>
+                        <p>LPorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="date">
+                        <h1>20.12</h1>
+                    </div>
+                </div>
+            </div>   
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Bus</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="date">
+                        <h1>21.02</h1>
+                    </div>
+                </div>
+            </div>  
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>School</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="date">
+                        <h1>21.04</h1>
+                    </div>
+                </div>
+            </div> 
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Taxi</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="date">
+                        <h1>21.06</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel_item">
+                    <div class="text">
+                        <h1>Office</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pretium ultrices nisi, vel egestas erat dictum vel. Quisque eget ultrices augue, sit amet facilisis ex. Etiam auctor accumsan augue eu vulputate. Aliquam a nulla auctor, consequat nisi in, dapibus sapien. Nunc tempor tempor eros, eget ornare lectus molestie sed. Donec nec justo fermentum nisi hendrerit molestie at non est. Nullam eget hendrerit augue.</p>
+                    </div>
+                    <div class="date">
+                        <h1>21.09</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="panel_item">
+                    <!-- <h1 id="sample">LOREM IPSUM</h1> -->
+                </div>
+            </div>
+        </section>
+        <div class="spacer">
+            <h1>The End</h1>
+        </div>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+let container = document.querySelector(".container");
+let tl = gsap.timeline({
+  scrollTrigger: {
+    pin: true,
+    scrub: 1,
+    trigger: container,
+    end: () => container.scrollWidth - document.documentElement.clientWidth// container 전체 가로크기 - 현재보여지는 창 가로크기 = 
+  },
+  defaults: { ease: Power0.easeNone, duration: 1 }
+});
+
+tl.to(".panel", { 
+    x: () => -(container.scrollWidth - document.documentElement.clientWidth) 
+}, 0)
+
+
+let texts = Array.from(document.querySelectorAll(".text"));
+let circles = Array.from(document.querySelectorAll(".date:after"));
+console.log(circles);
+
+function showText(){
+   texts.forEach(function(text){
+    if(text.getBoundingClientRect().left < 800){
+    text.classList.add("show");
+   }  else{
+       text.classList.remove("show");
+   }
+})
+}
+
+window.addEventListener("scroll", showText);
+
+</script>
+</body>
+</html>
+
+
+
+
