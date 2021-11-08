@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/ScrollTrigger.min.js"></script>
+    <title>Document</title>
+    <style>
+        html,body,p{padding:0;margin:0;}
+        body{
+            background-color: black;
+            color: white;
+        }
+        .wrapper{
+            position:relative;width:100%;height:auto;
+        }
+        section{
+            width:100%;height:100vh;position:relative;
+        }
+        section .text-box{
+            position: absolute;
+            bottom: 300px;
+            left: 200px;
+            width: 500px;
+        }
+        .bg-container{
+            width:100%;height:100vh;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+        }
+        .bg-container .bg{
+            width:100%;
+            height: 100%;
+            /* transform: translateX(400px); */
+            opacity:0;
+            position: fixed;
+            top: 0;
+            transition: all 0.5s;
+        }
+        .bg-container .bg.show{
+            opacity:1;
+        }
+        .blue{
+            background: #0477bf;
+        }
+        .red{
+            background: #e30072;
+        }
+        .spacer{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="spacer">
+        <h1>HELLO WORLD</h1>
+    </div>
+   <div class="wrapper">
+    <div class="bg-container">
+        <img class="bg" id="bg1" src="https://cdn.pixabay.com/photo/2021/08/25/20/42/field-6574455_960_720.jpg" alt="">
+        <img class="bg" id="bg2" src="https://cdn.pixabay.com/photo/2021/09/17/08/40/lake-6632026_960_720.jpg" alt="">
+        <img class="bg" id="bg3" src="https://cdn.pixabay.com/photo/2017/10/10/07/48/hills-2836301_960_720.jpg" alt="">
+        <img class="bg" id="bg4" src="https://cdn.pixabay.com/photo/2015/07/27/20/16/book-863418_960_720.jpg" alt="">
+        <img class="bg" id="bg5" src="https://cdn.pixabay.com/photo/2016/08/11/23/48/mountains-1587287_960_720.jpg" alt="">
+    </div>
+    <section class="section01">
+        <div class="text-box">
+            <p>대화 내용을 바탕으로 상대방의 목적을 크게 다섯가지로 분류했습니다.</p>
+        </div>
+    </section>
+    <section class="section02">
+        <div class="text-box">
+            <p>대화를 걸어온 1,034명 가운데 성적인 목적이 확인되지 않은 사람은 <span class="blue">375명</span>으로 전체의 36.3%입니다.
+                뚜렷한 목적이 드러나지 않거나 대화 단절이 포함된 ‘단순 채팅’ 313명(30.3%),
+                만나서 영화를 보자거나 저녁을 먹자는 등 ‘단순 만남’ 요구는 59명(5.7%)입니다.</p>
+        </div>
+    </section>
+    <section class="section03">
+        <div class="text-box">
+            <p>
+                랜덤채팅앱에서 접근해 온 1,034명 가운데 <span class="red">659명</span>(63.7%)은
+                ‘▲성매수 ▲성적 목적 만남 ▲성적 목적 채팅’이 목적으로 <span class="red">성적인 목적</span>으로 접근해왔습니다.</p>
+        </div>
+    </section>
+    <section class="section04">
+        <div class="text-box">
+            <p><마부작침>과 랜덤채팅앱에서 대화한 1,034명 가운데
+                노골적으로 <span class="red">성매수</span>를 제안한 건 <span class="red">265명</span>(25.6%)이었습니다.
+                대가를 약속하고 성관계 등을 요구한 사람들입니다.</p>
+        </div>
+    </section>
+    <section class="section05">
+        <div class="text-box">
+            <p><마부작침>은 성매수를 제안한 265명에게
+                먼저 <span>‘16살 여중생’</span>이라고 나이를 명확하게 밝혔습니다.
+                이 가운데 80%인 <span class="red">212명</span>은 '상관없다', '괜찮다'면서 성매수를 집요하게 제안했습니다.
+                성매수 시도를 중단한 사람은 고작 53명이었습니다.</p>
+        </div>
+    </section>
+   </div>
+   <div class="spacer">
+    <h1>HELLO WORLD</h1>
+   </div>
+   <script>
+
+let txtBoxes = Array.from(document.getElementsByClassName("text-box"));
+let bgs = Array.from(document.getElementsByClassName("bg"));
+console.log(bgs);
+
+function changeBg(e){
+    for (i=0;i<5;i++){
+        if(txtBoxes[i].getBoundingClientRect().top < 800){
+           bgs[i].classList.add("show");
+           if(i>0 && i<4){
+            bgs[i-1].classList.remove("show");
+           }else if (i ==4){
+            bgs[i-1].classList.remove("show");
+               if(txtBoxes[i].getBoundingClientRect().top < 0){
+                bgs[i].classList.remove("show");
+               }
+           }
+
+        }
+        else {
+            bgs[i].classList.remove("show");
+   }
+    }
+
+// i가 0일때, 첫 텍스트박스가 윈도우창 위에서 800보다 작아질때(=위로 많이 올라왔을때)
+// 첫번째 배경이 나오게 함. i는 아직 0보다 크지 않으니까 넘어감
+// i가 1일때, 두번째 텍스트박스가 위로 올라왔을때 배경 보이게 하고, i 0보다 크니까 첫번째 배경에 show 클래스를 없앰
+}
+
+window.addEventListener("scroll", changeBg);
+
+   </script>
+</body>
+</html>
