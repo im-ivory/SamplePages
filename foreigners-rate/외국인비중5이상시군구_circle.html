@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.6.1/ScrollTrigger.min.js"></script>
+    <title>Document</title>
+    <style>
+        html,body{width:100%;height:100%;margin:0;padding:0;}
+        .wrap{
+            position: relative;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        section{
+            width:100%;
+            height: 100vh;
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .img{
+          position: relative;
+        }
+        img{
+          width: 600px;
+          position: fixed;
+          top: 100px;
+          left: 600px;
+        }
+        #chart{
+            position:fixed;
+            top: 0;
+            left:300px;
+        }
+        #map path{
+           fill: rgba(73, 73, 73, 0.424);
+           stroke: rgb(100, 100, 100);
+           stroke-width: 0.15px;
+           /* cursor: pointer; */
+           /* transition: all 0.3s; */
+       }
+       #map path.c0{
+           fill: #e0f2f1
+       }
+       #map path.c1{
+           fill: #b2dfdb
+       }
+       #map path.c2{
+           fill: #80cbc4
+       }
+       #map path.c3{
+           fill: #4db6ac
+       }
+       #map path.c4{
+           fill: #26a69a
+       }
+       #map path.c5{
+           fill: #009688
+       }
+       #map path.c6{
+           fill: #00897b
+       }
+       #map path.c7{
+           fill: #00796b
+       }
+       #map path.c8{
+           fill: #00695c
+       }
+       /* #map path:hover{
+           fill:gold;
+       } */
+       #map .municipality-label{
+           font-weight: bold;
+       }
+       #chart{
+           transition: all 1s;
+       }
+       #chart{
+           transition: all 1s;
+           transform: scale(8) translate(20px,200px);
+       }
+
+       #chart.active{
+        transform: scale(1) translate(0px,0px);
+       }
+       p{
+           margin: 0;
+       }
+       div.tooltip {	
+    position: absolute;		
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;	
+    text-align: center;			
+    width: 100px;					
+    height: 100px;					
+    padding: 2px;				
+    font: 15px sans-serif;		
+    background: rgb(255, 255, 255);	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
+
+p:nth-child(2){
+    font-weight: bold;
+    font-size: 20px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <section class="section1" style="background-color: rgb(41, 41, 41)">
+          <div class="img">
+            <div id="chart"></div>
+          </div>
+        </section>
+        <section class="section2" style="background-color: rgb(41, 41, 41)"></section>
+    </div>
+    <script>
+  var width = 1000,
+            height = 900;
+ 
+        var svg = d3.select("#chart").append("svg")
+         .attr("width", width)
+         .attr("height", height);
+
+        var map = svg.append("g").attr("id", "map");
+
+        var projection = d3.geoMercator()
+        .center([126.6895, 37.351])
+        .scale(7000)
+        // .translate([width/2, height/2]);
+ 
+    var path = d3.geoPath().projection(projection);
+
+    // var div = d3.select("body").append("div")	
+    //     .attr("class", "tooltip")				
+    //     .style("opacity", 0);
+ 
+
+d3.json("map_simplify.json", function(error, data) {
+
+    var features = topojson.feature(data, data.objects.skorea_municipalities_2018_geo).features;
+console.log(features);
+    d3.csv("비중5프로.csv", function(error, csv) {
+
+    var quantize = d3.scaleQuantize()
+    .domain([0,40])
+    .range(d3.range(9).map(function(i){ return i ;}))
+
+    csv.forEach(function(e){
+        features.forEach(function(d){
+        if(d.properties.name == e.city){
+            d.properties.rate = e.rate;
+        }
+
+        d.properties.quantized = quantize(d.properties.rate);
+
+        
+    })
+    })
+
+    newFeatures = features.filter( function(d){return d.properties.rate !==undefined} )
+    
+  map.selectAll("path")
+      .data(features)
+      .enter().append("path")
+    //   .attr("class", function(d) { return `c${d.properties.quantized}` })
+      .attr("d", path)
+    //   .on("mouseover", function(d) {		
+    //         div	.html(`<p>${d.properties.name}</p><p>${d.properties.rate}%</p>`)
+    //             .style("left", (d3.event.pageX) + "px")		
+    //             .style("top", (d3.event.pageY - 28) + "px")
+    //             .style("opacity", 1)	
+    //         })					
+    //    .on("mouseout", function(d) {		
+    //         div.style("opacity", 0);	
+    //     });
+             .transition()
+        .duration(2000)
+       .style("fill", function(d) { 
+           if(d.properties.name == "안산시단원구" || d.properties.name == "안산시상록구"){
+            return "#ff9494";
+           } else{
+               return "rgba(73, 73, 73, 0.524)";
+           }
+          
+        });
+   
+        map.selectAll("circle")
+        .data(newFeatures)
+        .enter().append("circle")
+        //   .attr("cx", "-.6em")
+        // .attr("cy", ".55em")
+        .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+        .attr("r",8)
+        .style("fill", "transparent");
+
+
+        map.selectAll("text")
+    .data(newFeatures)
+    // .enter().append("text")
+    // .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+    // .attr("dx", "-.6em")
+    // .attr("dy", ".55em"
+    // // function(d){
+    //   // if(d.properties.code == 31){
+    //   //   return "-3em"
+    //   // }else if(d.properties.code == 33){
+    //   //   return "-2em"
+    //   // }else{
+    //   //   return ".55em"
+    //   // }
+    // // }
+    // )
+    .style("fill", "black"
+    // function(d){
+    //   if(d.properties.code == 23 || d.properties.code == 21){
+    //     return "white"
+    //   }else{
+    //     return "black"
+    //   }
+    // }
+    )
+    // .attr("class", (function(d) { return "city-label "+d.properties.code; }))
+    // .text(function(d) { return d.properties.name;  } )
+    // .on("mouseover", function(d) {		
+    //   div	.html(`<p>${d.properties.name}</p><p>${d.properties.rate}%</p><p>${d3.format(",")(d.properties.case)}</p>`)
+    //     .style("left", (d3.event.pageX) + "px")		
+    //     .style("top", (d3.event.pageY - 28) + "px")
+    //     .style("opacity", 1)
+    // })					
+    // .on("mouseout", function(d) {		
+    //   div.style("opacity", 0);	
+    // });
+
+
+    })
+
+   
+   
+
+});
+
+d3.selectAll(".municipality-label")
+    .attr("dy", ".5em");
+
+
+    function resetSum(){
+        map.selectAll("circle")
+        .style("fill", "transparent")
+
+    //    svg.attr("transform", "translate(10,20)")
+    //    .attr("width", 300)
+    //      .attr("height", 300);
+
+    const mapChart = document.querySelector("#chart");
+      mapChart.classList.remove("active");
+
+
+      d3.json("map_simplify.json", function(error, data) {
+
+var features = topojson.feature(data, data.objects.skorea_municipalities_2018_geo).features;
+
+map.selectAll("path")
+      .data(features)
+      .enter().append("path")
+      .attr("d", path)
+        .transition()
+        .duration(2000)
+       .style("fill", "rgba(73, 73, 73, 0.424)");
+      })
+  } 
+
+    function firstSum(){
+        map.selectAll("circle")
+        .transition()
+        .duration(2000)
+        .style("fill", "#ff9494")
+        .style("opacity", 0.7);
+
+    //     var projection = d3.geoMercator()
+    //     .center([126.6895, 37.351])
+    //     .scale(9000)
+    //     // .translate([width/2, height/2]);
+ 
+    // var path = d3.geoPath().projection(projection);
+
+    // map.selectAll("path")
+    //   .enter().append("path")
+    // //   .attr("class", function(d) { return `c${d.properties.quantized}` })
+    //   .attr("d", path)
+
+      const mapChart = document.querySelector("#chart");
+      mapChart.classList.add("active");
+
+  } 
+
+  function secondSum(){
+        map.selectAll("circle")
+        .style("fill", "green")
+  } 
+
+    gsap.registerPlugin(ScrollTrigger);
+
+ScrollTrigger.create({
+    trigger: ".section1",
+    // onEnter: resetSum,
+    onLeave: firstSum,
+    onEnterBack: resetSum,
+    // onLeaveBack: resetSum,
+    });
+
+ScrollTrigger.create({
+    trigger: ".section2",
+    // onEnter: firstSum,
+    onLeave: secondSum,
+    onEnterBack: firstSum,
+    // onLeaveBack: resetSum,
+    });
+
+
+
+    </script>
+</body>
+</html>
