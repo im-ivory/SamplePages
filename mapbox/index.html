@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Mapbox Storytelling</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin:0;
+            padding:0;
+            font-family: sans-serif;
+        }
+        a, a:hover, a:visited {
+            color: #0071bc;
+        }
+        #map {
+            top:0;
+            height: 100vh;
+            width:100vw;
+            position: fixed;
+        }
+        #header {
+            margin: auto;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+        #header h1, #header h2, #header p {
+            margin: 0;
+            padding: 2vh 2vw;
+            text-align: center;
+        }
+        #footer {
+            width: 100%;
+            min-height: 5vh;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+            text-align: center;
+            line-height: 25px;
+            font-size: 13px;
+            position: relative;
+            z-index: 5;
+        }
+        #features {
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+        }
+        .hidden {
+            visibility: hidden;
+        }
+        .centered {
+            width: 50vw;
+            margin: 0 auto;
+        }
+        .lefty {
+            width: 33vw;
+            margin-left: 5vw;
+        }
+        .righty {
+            width: 33vw;
+            margin-left: 62vw;
+        }
+        .fully {
+            width: 100%;
+            margin: auto;
+        }
+        .light {
+            color: #444;
+            background-color: #fafafa;
+        }
+        .dark {
+            color: #fafafa;
+            background-color: #444;
+        }
+        .step {
+            padding-bottom: 50vh;
+            /* margin-bottom: 10vh; */
+            opacity: 0.25;
+        }
+        .step.active {
+            opacity: 0.9;
+        }
+
+        .step div {
+            padding:  25px 50px;
+            line-height: 25px;
+            font-size: 13px;
+        }
+
+        .step img {
+            width: 100%;
+        }
+
+        .class{
+          color: red;
+        }
+        .class.remove{
+          display: none;
+        }
+
+        .korea.hide{
+          display:none;
+        }
+
+        @media (max-width: 750px) {
+            .centered, .lefty, .righty, .fully {
+                width: 90vw;
+                margin: 0 auto;
+            }
+        }
+
+        /* Fix issue on mobile browser where scroll breaks  */
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan, 
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan .mapboxgl-canvas {
+            touch-action: unset;
+        }
+
+        </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="story"></div>
+<script src="./config.js"></script>
+<script>
+var layerTypes = {
+    'fill': ['fill-opacity'],
+    'line': ['line-opacity'],
+    'circle': ['circle-opacity', 'circle-stroke-opacity'],
+    'symbol': ['icon-opacity', 'text-opacity'],
+    'raster': ['raster-opacity'],
+    'fill-extrusion': ['fill-extrusion-opacity'],
+    'heatmap': ['heatmap-opacity']
+}
+
+var alignments = {
+    'left': 'lefty',
+    'center': 'centered',
+    'right': 'righty',
+    'full': 'fully'
+}
+
+function getLayerPaintType(layer) {
+    var layerType = map.getLayer(layer).type;
+    return layerTypes[layerType];
+}
+
+function setLayerOpacity(layer) {
+    var paintProps = getLayerPaintType(layer.layer);
+    paintProps.forEach(function(prop) {
+        var options = {};
+        if (layer.duration) {
+            var transitionProp = prop + "-transition";
+            options = { "duration": layer.duration };
+            map.setPaintProperty(layer.layer, transitionProp, options);
+        }
+        map.setPaintProperty(layer.layer, prop, layer.opacity, options);
+    });
+}
+
+
+var story = document.getElementById('story');
+var features = document.createElement('div');
+features.setAttribute('id', 'features');
+
+var header = document.createElement('div');
+
+if (config.title) {
+    var titleText = document.createElement('h1');
+    titleText.innerText = config.title;
+    header.appendChild(titleText);
+}
+
+if (config.subtitle) {
+    var subtitleText = document.createElement('h2');
+    subtitleText.innerText = config.subtitle;
+    header.appendChild(subtitleText);
+}
+
+if (config.byline) {
+    var bylineText = document.createElement('p');
+    bylineText.innerText = config.byline;
+    header.appendChild(bylineText);
+}
+
+if (header.innerText.length > 0) {
+    header.classList.add(config.theme);
+    header.setAttribute('id', 'header');
+    story.appendChild(header);
+}
+
+config.chapters.forEach((record, idx) => {
+    var container = document.createElement('div');
+    var chapter = document.createElement('div');
+
+    if (record.title) {
+        var title = document.createElement('h3');
+        title.innerText = record.title;
+        chapter.appendChild(title);
+    }
+
+    if (record.image) {
+        var image = new Image();
+        image.src = record.image;
+        chapter.appendChild(image);
+    }
+
+    if (record.description) {
+        var story = document.createElement('p');
+        story.innerHTML = record.description;
+        chapter.appendChild(story);
+    }
+
+    container.setAttribute('id', record.id);
+    container.classList.add('step');
+    if (idx === 0) {
+        container.classList.add('active');
+    }
+
+    chapter.classList.add(config.theme);
+    container.appendChild(chapter);
+    container.classList.add(alignments[record.alignment] || 'centered');
+    if (record.hidden) {
+        container.classList.add('hidden');
+    }
+    features.appendChild(container);
+});
+
+story.appendChild(features);
+
+var footer = document.createElement('div');
+
+if (config.footer) {
+    var footerText = document.createElement('p');
+    footerText.innerHTML = config.footer;
+    footer.appendChild(footerText);
+}
+
+if (footer.innerText.length > 0) {
+    footer.classList.add(config.theme);
+    footer.setAttribute('id', 'footer');
+    story.appendChild(footer);
+}
+
+mapboxgl.accessToken = config.accessToken;
+
+const transformRequest = (url) => {
+    const hasQuery = url.indexOf("?") !== -1;
+    const suffix = hasQuery ? "&pluginName=scrollytellingV2" : "?pluginName=scrollytellingV2";
+    return {
+      url: url + suffix
+    }
+}
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: config.style,
+    center: config.chapters[0].location.center,
+    zoom: config.chapters[0].location.zoom,
+    bearing: config.chapters[0].location.bearing,
+    pitch: config.chapters[0].location.pitch,
+    interactive: false,
+    transformRequest: transformRequest
+});
+
+if (config.showMarkers) {
+    var marker = new mapboxgl.Marker({ color: config.markerColor });
+    marker.setLngLat(config.chapters[0].location.center).addTo(map);
+}
+
+map.dragPan.enable();
+// map.scrollZoom.enable();
+
+// instantiate the scrollama
+var scroller = scrollama();
+
+map.on("load", function() {
+    if (config.use3dTerrain) {
+        map.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+            'tileSize': 512,
+            'maxzoom': 14
+        });
+        // add the DEM source as a terrain layer with exaggerated height
+        map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+
+        // add a sky layer that will show when the map is highly pitched
+        map.addLayer({
+            'id': 'sky',
+            'type': 'sky',
+            'paint': {
+                'sky-type': 'atmosphere',
+                'sky-atmosphere-sun': [0.0, 0.0],
+                'sky-atmosphere-sun-intensity': 15
+            }
+        });
+    };
+
+    ///////////////// 전국
+    const csvUrl =
+        "https://raw.githubusercontent.com/im-ivory/testset/main/%EC%8B%9C%EA%B5%B0%EA%B5%AC%EB%B9%84%EC%9C%A8.csv";
+
+      const csvPromise = papaPromise(csvUrl);
+
+      csvPromise.then(function (results) {
+          results.data.forEach((row) => {
+            // row.rate = parseInt(row.rate);
+            map.setFeatureState(
+              {
+                //YOUR TURN: Replace with your source tileset and source layer
+                source: "skorea-provinces-2018-topo-si-931d1r",
+                sourceLayer: "skorea-provinces-2018-topo-si-931d1r",
+                //YOUR TURN: Replace with unqiue ID row name
+                id: row.city,
+              },
+              //YOUR TURN: Add rows you want to style/interact with
+              {
+                rate: +(row.rate*100).toFixed(2),
+              }
+            );
+          });
+        });
+
+
+        map.addSource("skorea-provinces-2018-topo-si-931d1r", {
+          type: "vector",
+          url: "mapbox://qlqhaks.1fxmww77",
+          promoteId: "name",
+        });
+
+        map.addLayer(
+            {
+          id: "ca-district-fill",
+          type: "fill",
+          source: "skorea-provinces-2018-topo-si-931d1r",
+          "source-layer": "skorea-provinces-2018-topo-si-931d1r",
+          layout: {},
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["feature-state","rate"],
+              1.5,
+              "#ffeda0",
+              2.5,
+              "#fed976",
+              3.5,
+              "#feb24c",
+              4.5,
+              "#fd8d3c",
+              5,
+              "#e31a1c",
+            ],
+            "fill-opacity": 0,
+          },
+        }
+        );
+
+        var korPopup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "korea",
+      });
+
+        map.on("mousemove", "ca-district-fill", function (e) {
+        
+        map.getCanvas().style.cursor = "pointer";
+
+        var district = map.queryRenderedFeatures(e.point, {
+          layers: ["ca-district-fill"],
+        });
+        const name = e.features[0].properties.name;
+        const rate = e.features[0].state.rate;
+
+        var content =  "<strong>" + name + "</strong><br>";
+        content += "외국인 비율: " + rate + "%<br>";
+        korPopup.setLngLat(e.lngLat).setHTML(content).addTo(map);
+
+        const page = document.querySelector("#page00");
+        // map.getCanvas().style.cursor = "";
+        if(page.classList.contains("active") == false){
+          korPopup.remove();
+        }
+      });
+
+      map.on("mouseleave", "ca-district-fill", function () {
+        map.getCanvas().style.cursor = "";
+        korPopup.remove();
+      });
+
+      
+
+
+    // /////////////////////// 경기도
+
+    const ggcsvUrl =
+        "https://raw.githubusercontent.com/im-ivory/testset/main/%EA%B2%BD%EA%B8%B0%EB%8F%84%EB%B9%84%EC%9C%A8.csv";
+
+      const ggcsvPromise = papaPromise(ggcsvUrl);
+
+      ggcsvPromise.then(function (results) {
+          results.data.forEach((row) => {
+            row.number = parseInt(row.number);
+            map.setFeatureState(
+              {
+                //YOUR TURN: Replace with your source tileset and source layer
+                source: "true",
+                sourceLayer: "true",
+                //YOUR TURN: Replace with unqiue ID row name
+                id: row.city,
+              },
+              //YOUR TURN: Add rows you want to style/interact with
+              {
+                rate: +(row.rate*100).toFixed(2),
+              }
+            );
+          });
+        });
+
+        map.addSource("true", {
+          type: "vector",
+          url: "mapbox://qlqhaks.arbpudhl",
+          promoteId: "name",
+        });
+
+        map.addLayer(
+            {
+          id: "gg-district-fill",
+          type: "fill",
+          source: "true",
+          "source-layer": "true",
+          layout: {},
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["feature-state","rate"],
+              1.5,
+              "#ffeda0",
+              3.5,
+              "#fed976",
+              5.5,
+              "#feb24c",
+              7.5,
+              "#fd8d3c",
+              9.5,
+              "#fc4e2a",
+              11.5,
+              "#e31a1c",
+              13.5,
+              "#bd0026",
+              15.5,
+              "#94001e"
+            ],
+            "fill-opacity": 0,
+          },
+        }
+        );
+
+        var ggpopup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: "gyeonggi",
+      });
+
+      map.on("mousemove", "gg-district-fill", function (e) {
+        map.getCanvas().style.cursor = "pointer";
+
+        var district = map.queryRenderedFeatures(e.point, {
+          layers: ["gg-district-fill"],
+        });
+        const name = e.features[0].properties.name;
+        const rate = e.features[0].state.rate;
+
+        var content =  "<strong>" + name + "</strong><br>";
+        content += "외국인 비율: " + rate + "%<br>";
+        ggpopup.setLngLat(e.lngLat).setHTML(content).addTo(map);
+
+        const page = document.querySelector("#page01");
+        // map.getCanvas().style.cursor = "";
+        if(page.classList.contains("active") == false){
+          ggpopup.remove();
+        }
+
+      });
+
+      map.on("mouseleave", "gg-district-fill", function (e) {
+        map.getCanvas().style.cursor = "";
+        ggpopup.remove();
+      });
+
+
+      //////////////////안산
+      const ascsvUrl =
+        "https://raw.githubusercontent.com/im-ivory/testset/main/%EC%95%88%EC%82%B0%EC%99%B8%EA%B5%AD%EC%9D%B8%EC%A3%BC%EB%AF%BC%EC%88%984.csv";
+
+      const ascsvPromise = papaPromise(ascsvUrl);
+
+      ascsvPromise.then(function (results) {
+          results.data.forEach((row) => {
+            row.rate = parseInt(row.rate);
+            map.setFeatureState(
+              {
+                //YOUR TURN: Replace with your source tileset and source layer
+                source: "ansansirate-1ha3ry",
+                sourceLayer: "ansansirate-1ha3ry",
+                //YOUR TURN: Replace with unqiue ID row name
+                id: row.name,
+              },
+              //YOUR TURN: Add rows you want to style/interact with
+              {
+                rate: +(row.rate).toFixed(2),
+              }
+            );
+          });
+        });
+
+
+
+    map.addSource("ansansirate-1ha3ry", {
+          type: "vector",
+          url: "mapbox://qlqhaks.1pt7m5ao",
+          promoteId: "name",
+        });
+
+        map.addSource("real_wongok-9l55j8", {
+          type: "vector",
+          url: "mapbox://qlqhaks.39jxyl5a",
+          promoteId: "EMD_KOR_NM",
+        });
+
+        map.addLayer(
+            {
+          id: "as-district-fill",
+          type: "fill",
+          source: "ansansirate-1ha3ry",
+          "source-layer": "ansansirate-1ha3ry",
+          layout: {},
+          paint: {
+            "fill-color": [
+              "interpolate",
+              ["linear"],
+              ["feature-state","rate"],
+              0,
+              "#ffeda0",
+              3,
+              "#fed976",
+              5,
+              "#feb24c",
+              15,
+              "#fd8d3c",
+              20,
+              "#fc4e2a",
+              30,
+              "#e31a1c",
+              50,
+              "#bd0026",
+            ],
+            "fill-opacity": 0,
+          },
+        }
+        );
+
+        var asPopup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+
+        map.on("mousemove", "as-district-fill", function (e) {
+        
+        map.getCanvas().style.cursor = "pointer";
+
+        var district = map.queryRenderedFeatures(e.point, {
+          layers: ["as-district-fill"],
+        });
+        const name = e.features[0].properties.name;
+        const rate = e.features[0].state.rate;
+
+        var content =  "<strong>" + name + "</strong><br>";
+        content += "외국인 비율: " + rate + "%<br>";
+        asPopup.setLngLat(e.lngLat).setHTML(content).addTo(map);
+
+        const page = document.querySelector("#page02");
+        // map.getCanvas().style.cursor = "";
+        if(page.classList.contains("active") == false){
+          asPopup.remove();
+        }
+      });
+
+      map.on("mouseleave", "as-district-fill", function () {
+        map.getCanvas().style.cursor = "";
+        asPopup.remove();
+      });
+
+
+
+        ///////////////원곡동
+        map.addLayer(
+            {
+          id: "wg-district-fill",
+          type: "fill",
+          source: "real_wongok-9l55j8",
+          "source-layer": "real_wongok-9l55j8",
+          layout: {},
+          paint: {
+            "fill-color": "#fd8d3c",
+            "fill-opacity": 0,
+          },
+        }
+        );
+        map.addLayer(
+            {
+          id: "wg-district-line",
+          type: "line",
+          source: "real_wongok-9l55j8",
+          "source-layer": "real_wongok-9l55j8",
+          layout: {},
+          paint: {
+            "line-color": "#bd0026",
+            "line-width": 3,
+            "line-opacity": 0,
+          },
+        }
+        );
+
+
+    // setup the instance, pass callback functions
+    scroller
+    .setup({
+        step: '.step',
+        offset: 0.5,
+        progress: true
+    })
+    .onStepEnter(response => {
+        var chapter = config.chapters.find(chap => chap.id === response.element.id);
+        response.element.classList.add('active');
+        map[chapter.mapAnimation || 'flyTo'](chapter.location);
+        chapter
+        if (config.showMarkers) {
+            marker.setLngLat(chapter.location.center);
+        }
+        if (chapter.onChapterEnter.length > 0) {
+            chapter.onChapterEnter.forEach(setLayerOpacity);
+        }
+        if (chapter.callback) {
+            window[chapter.callback]();
+        }
+        if (chapter.rotateAnimation) {
+            map.once('moveend', function() {
+                const rotateNumber = map.getBearing();
+                map.rotateTo(rotateNumber + 90, {
+                    duration: 24000, easing: function (t) {
+                        return t;
+                    }
+                });
+            });
+        }
+    })
+    .onStepExit(response => {
+        var chapter = config.chapters.find(chap => chap.id === response.element.id);
+        response.element.classList.remove('active');
+        if (chapter.onChapterExit.length > 0) {
+            chapter.onChapterExit.forEach(setLayerOpacity);
+        }
+    });
+});
+
+
+///////////////////////////////////
+
+
+
+// ///////////// 안산
+
+
+// const page = document.querySelector("#page01");
+// var popup = document.querySelector(".mapboxgl-popup");
+// function removePopup(){
+//   if(page.classList.contains("active") == true){
+//     console.log(popup);
+// }
+// }
+
+
+
+
+    
+const page = document.querySelector("#page01");
+  if(page.classList.contains("active") == true){
+    page.
+    map.on("mousemove", "ca-district-fill", function (e) {
+        popup.setHTML("<p>adgaga</p>");
+      });  
+}
+
+
+
+function papaPromise(url) {
+  return new Promise(function (resolve, reject) {
+    Papa.parse(url, {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: resolve,
+    });
+  });
+}
+
+// setup resize event
+window.addEventListener('resize', scroller.resize);
+// window.addEventListener('mousemove', removePopup);
+// removePopup();
+
+</script>
+
+</body>
+</html>
