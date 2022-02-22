@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            width:500px;
+            height:500px;
+            position:absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        .circle{
+            width:200px;
+            height:200px;
+            background-color: black;
+            border-radius: 50%;
+            animation: rotate 8s linear infinite;
+            margin:0;
+            position:absolute;
+            filter: blur(10px);
+        }
+        .circle:first-child{
+            width:400px;
+            height:360px;
+            top:15%;
+            left:18%;
+        }
+        .circle:nth-child(2){
+            width:275px;
+            height:310px;
+            top:2%;
+            right:10%;
+        }
+        .circle:nth-child(3){
+            width:250px;
+            height:220px;
+            animation: rotate2 8s linear infinite;
+        }
+        .circle:last-child{
+            bottom:20%;
+            width:245px;
+            height:260px;
+        }
+
+        h1{
+            color:white;
+            position:absolute;
+            top:50%;
+            left:50%;
+        }
+
+        @keyframes rotate{
+        0% {transform:  rotate(0deg)}
+        100% {transform:  rotate(-720deg)}
+        }
+        @keyframes rotate2{
+        0% {transform:  rotate(0deg)}
+        100% {transform:  rotate(720deg)}
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <h1>웅덩이</h1>
+    </div>
+</body>
+</html>
